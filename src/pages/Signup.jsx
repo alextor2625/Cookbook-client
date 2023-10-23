@@ -11,7 +11,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(""); //Need Fixing
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState(undefined);
 
