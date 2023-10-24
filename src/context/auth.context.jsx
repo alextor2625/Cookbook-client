@@ -34,6 +34,7 @@ function AuthProvider({ children }) {
       .then((response) => {
         // If the server verifies that the JWT token is valid  
         const user = response.data;
+        console.log('User From Auth Context', user);
        // Update state variables        
         setIsLoggedIn(true);
         setIsLoading(false);
@@ -67,6 +68,7 @@ function AuthProvider({ children }) {
   useEffect(() => { 
 
     authenticateUser()
+
 
   }, []);
   

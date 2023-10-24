@@ -9,7 +9,8 @@ import ExplorePage from './pages/ExplorePage'
 import BrowseRecipesPage from './pages/BrowseRecipesPage'
 import RecipeDetailsPage from './pages/RecipeDetailsPage'
 import UserDetailsPage from './pages/UserDetailsPage';
-
+import AddRecipePage from './pages/AddRecipePage'
+import "bootstrap/dist/css/bootstrap.min.css"
 function App() {
 
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path='/explore' element={<ExplorePage />}/>
         <Route path='/profile/:profileId' element={<UserDetailsPage />}/>
         <Route path='/browse/recipes' element={<BrowseRecipesPage />}/>
+        <Route path='/recipe/create' element={<AddRecipePage />}/>
       </Routes>
     </div>
   )

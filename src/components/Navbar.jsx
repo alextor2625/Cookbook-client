@@ -1,7 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import Signup from './../pages/Signup';
-import ExplorePage from './../pages/ExplorePage';
 
 const Navbar = () => {
   return (

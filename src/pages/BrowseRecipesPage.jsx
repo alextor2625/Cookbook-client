@@ -17,8 +17,13 @@ const BrowseRecipesPage = () => {
               <div>
                 <span>Name:{recipe.name}</span>
                 <span>Category:{recipe.category}</span>
-                <span>Created By:{recipe.author.name}</span>
-                <span>Last Edited By:{recipe.alteredBy.name}</span>
+
+                {recipe.author._id == recipe.alteredBy._id && (
+                  <span>Created By:{recipe.author.name}</span>
+                )}
+                {recipe.author._id != recipe.alteredBy._id && (
+                  <span>Last Edited By:{recipe.alteredBy.name}</span>
+                )}
               </div>
             </div>
           </Link>
