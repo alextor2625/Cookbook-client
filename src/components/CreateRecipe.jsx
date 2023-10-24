@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
+import { AuthContext } from "../context/auth.context";
+import { uploadImg } from "../services/uploadService";
 
-const AddRecipePage = () => {
+const CreateRecipe = () => {
   const [newRecipe, setNewRecipe] = useState({
     name: "",
     category: "",
@@ -11,21 +13,39 @@ const AddRecipePage = () => {
     ingredients: "",
     instructions: "",
   });
-
+  const [file, setFile] = useState(null);
+  const { authenticateUser, storeToken } = useContext(AuthContext);
   const handleTextChange = (e) => {
     setNewRecipe((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleFile = (e) => setFile(e.target.files[0]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    post("/recipes/create", newRecipe)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
+    if (file) {
+      uploadImg(file).then((response) => {
+        post("/recipes/create", { ...newRecipe, image: response.data.fileUrl })
+          .then((response) => {
+            console.log(response.data);
+            storeToken(response.data.authToken);
+            authenticateUser();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
+    } else {
+      post("/recipes/create", newRecipe)
+        .then((response) => {
+          console.log(response.data);
+          storeToken(response.data.authToken);
+          authenticateUser();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -38,7 +58,7 @@ const AddRecipePage = () => {
             className="form-control"
             name="image"
             type="file"
-            onChange={handleTextChange}
+            onChange={handleFile}
           />
         </Form.Group>
 
@@ -53,7 +73,7 @@ const AddRecipePage = () => {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Category: </Form.Label>
-          <Form.Select>
+          <Form.Select name="category" onChange={handleTextChange}>
             <option value=""></option>
             <option value="Breakfast">Breakfast</option>
             <option value="Lunch">Lunch</option>
@@ -101,4 +121,4 @@ const AddRecipePage = () => {
   );
 };
 
-export default AddRecipePage;
+export default CreateRecipe;

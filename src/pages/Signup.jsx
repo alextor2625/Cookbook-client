@@ -88,46 +88,7 @@ const Signup = () => {
           setErrorMessage(errorDescription);
         });
     }
-    // post(`/auth/signup`, requestBody)
-    //   .then((response) => {
-    //     storeToken(response.data.authToken);
-    //     authenticateUser();
-    //     setNewUser(true)
-    //     navigate("/profile");
-    //   })
-    //   .catch((error) => {
-    //     const errorDescription = error.response.data.message;
-    //     setErrorMessage(errorDescription);
-    //   });
   };
-
-  //   const handleSignupSubmit = (e) => {
-  //     e.preventDefault();
-  //     // Create an object representing the request body
-  //     const imgUrl = handleUpload();
-  //     let requestBody;
-  //     if (imgUrl) {
-  //       requestBody = { email, password, name, image: imgUrl };
-  //     } else {
-  //       requestBody = { email, password, name };
-  //     }
-
-  //     // Make an axios request to the API
-  //     // If the POST request is a successful redirect to the login page
-  //     // If the request resolves with an error, set the error message in the state
-  //     post("/auth/signup", requestBody)
-  //       .then((response) => {
-  //         console.log("Created user ===>", response.data);
-  //         storeToken(response.data.authToken);
-  //         authenticateUser();
-  //         navigate("/profile");
-  //       })
-  //       .catch((error) => {
-  //         const errorDescription = error.response.data.message;
-  //         setErrorMessage(errorDescription);
-  //       });
-
-  //   };
 
   return (
     <div className="SignupPage">
@@ -166,26 +127,6 @@ const Signup = () => {
         </Form.Group>
         <Button variant="primary" type="submit">Signup</Button>
       </Form>
-      {/* <form onSubmit={handleSignupSubmit}>
-        <label>Name:</label>
-        <input type="text" name="name" value={name} onChange={handleInput} />
-
-        <label>Email:</label>
-        <input type="email" name="email" value={email} onChange={handleInput} />
-
-        <label>Profile Image:</label>
-        <input type="file" name="file" onChange={handleInput} />
-
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handleInput}
-        />
-
-        <button type="submit">Sign Up</button>
-      </form> */}
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 

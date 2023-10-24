@@ -4,6 +4,7 @@ import { AuthContext } from "../context/auth.context";
 import { Link, useNavigate } from "react-router-dom";
 
 import { post } from "../services/authService";
+import { Button, Form } from "react-bootstrap";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -40,26 +41,27 @@ const Login = () => {
     return (
       <div className="LoginPage">
         <h1>Login</h1>
-  
-        <form onSubmit={handleLoginSubmit}>
-          <label>Email:</label>
-          <input 
-            type="email"
+        <Form onSubmit={handleLoginSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label> Email: </Form.Label>
+          <Form.Control
             name="email"
+            type="text"
             value={email}
             onChange={handleEmail}
           />
-  
-          <label>Password:</label>
-          <input
-            type="password"
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label> Password: </Form.Label>
+          <Form.Control
             name="password"
+            type="password"
             value={password}
             onChange={handlePassword}
           />
-  
-          <button type="submit">Login</button>
-        </form>
+        </Form.Group>
+        <Button variant="primary" type="submit">Login</Button>
+        </Form>
         { errorMessage && <p className="error-message">{errorMessage}</p> }
   
         <p>Don't have an account yet?</p>

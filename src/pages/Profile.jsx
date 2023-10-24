@@ -1,40 +1,25 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/auth.context";
-import { Button, Tab, Tabs } from "react-bootstrap";
-import { Form, Link } from "react-router-dom";
-import { UsersContext } from "../context/users.context";
-import AddRecipe from "../components/AddRecipe";
+import { Button, Card, Spinner, Tab, Tabs } from "react-bootstrap";
+// import { Link } from "react-router-dom";
+// import { UsersContext } from "../context/users.context";
+import CreateRecipe from "../components/CreateRecipe";
+import CreateCookBook from "../components/CreateCookBook";
+import EditUser from "../components/EditUser";
+import DisplayUserRecipes from "../components/DisplayUserRecipes";
+import DisplayUserCookBooks from "../components/DisplayUserCookBooks";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  const { users } = useContext(UsersContext);
+  const [profileEdit, setProfileEdit] = useState(false);
 
-  const [newRecipe, setNewRecipe] = useState({
-    name: "",
-    category: "",
-    author: "",
-    alteredBy: "",
-    ingredients: "",
-    instructions: "",
-  });
-
-  const handleTextChange = (e) => {
-    console.log(e);
-    setNewRecipe((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleEditProfile = () => {
+    if (profileEdit) {
+      setProfileEdit(false);
+    } else {
+      setProfileEdit(true);
+    }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    post("/recipes/create", newRecipe)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   return (
     <div>
       {user ? (
@@ -45,52 +30,46 @@ const Profile = () => {
             className="mb-3"
           >
             <Tab eventKey="profile" title="Profile">
-              <div>
-                <h1>Profile</h1>
-                <img src={user.image} alt="Profile Image" />
-                <div>
-                  Name: <span>{user.name}</span>
-                </div>
-                <div>
-                  Email: <span>{user.email}</span>
-                </div>
-                <div>
-                  Total Recipes: <span>{user.recipes?.length}</span>
-                </div>
-                <div>
-                  Total CookBooks: <span>{user.cookbooks?.length}</span>
-                </div>
-                <div>
-                  Total Reviews: <span>{user.reviews?.length}</span>
-                </div>
-              </div>
-            </Tab>
-            <Tab eventKey="my-recipes" title="My Recipes">
-              {user.recipes.length ? (
-                user.recipes.map((recipe) => {
-                  return (
-                    <Link key={recipe._id} to={`/recipe/${recipe._id}`}>
-                      <div>
-                        <img src={recipe.image} />
-                        <div>
-                          <span>Name:{recipe.name}</span>
-                          <span>Category:{recipe.category}</span>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })
+              {!profileEdit ? (
+                <Card style={{ width: "30rem" }} name="profile">
+                  <Card.Img variant="top" src={user.image} />
+                  <Card.Body>
+                    <Card.Title>Profile</Card.Title>
+                    <Card.Text>Name: {user.name}</Card.Text>
+                    <Card.Text>Email: {user.email}</Card.Text>
+                    <Card.Text>Total Recipes: {user.recipes?.length}</Card.Text>
+                    <Card.Text>
+                      Total CookBooks: {user.cookbooks?.length}
+                    </Card.Text>
+                    <Card.Text>Total Reviews: {user.reviews?.length}</Card.Text>
+
+                    <Button variant="primary" onClick={handleEditProfile}>
+                      Edit
+                    </Button>
+                  </Card.Body>
+                </Card>
               ) : (
-                <div>No Recipes</div>
+                <EditUser handleEditProfile={handleEditProfile} />
               )}
             </Tab>
-            <Tab eventKey="add-recipe" title="➕ Recipe">
-                <AddRecipe />
+            <Tab eventKey="my-recipes" title="My Recipes">
+              <DisplayUserRecipes userId={user._id} />
+            </Tab>
+            <Tab eventKey="my-cookbooks" title="My CookBooks">
+              <DisplayUserCookBooks userId={user._id} />
+            </Tab>
+            <Tab eventKey="create-recipe" title="➕ Recipe">
+              <CreateRecipe />
+            </Tab>
+            <Tab eventKey="create-cookbook" title="➕ CookBook">
+              <CreateCookBook />
             </Tab>
           </Tabs>
         </div>
       ) : (
-        <h1>Loading</h1>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       )}
     </div>
   );
