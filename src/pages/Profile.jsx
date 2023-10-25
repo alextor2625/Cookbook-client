@@ -8,6 +8,8 @@ import CreateCookBook from "../components/CreateCookBook";
 import EditUser from "../components/EditUser";
 import DisplayUserRecipes from "../components/DisplayUserRecipes";
 import DisplayUserCookBooks from "../components/DisplayUserCookBooks";
+import DisplayUser from './../components/DisplayUser';
+import MySpinner from "../components/MySpinner";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -31,23 +33,7 @@ const Profile = () => {
           >
             <Tab eventKey="profile" title="Profile">
               {!profileEdit ? (
-                <Card style={{ width: "30rem" }} name="profile">
-                  <Card.Img variant="top" src={user.image} />
-                  <Card.Body>
-                    <Card.Title>Profile</Card.Title>
-                    <Card.Text>Name: {user.name}</Card.Text>
-                    <Card.Text>Email: {user.email}</Card.Text>
-                    <Card.Text>Total Recipes: {user.recipes?.length}</Card.Text>
-                    <Card.Text>
-                      Total CookBooks: {user.cookbooks?.length}
-                    </Card.Text>
-                    <Card.Text>Total Reviews: {user.reviews?.length}</Card.Text>
-
-                    <Button variant="primary" onClick={handleEditProfile}>
-                      Edit
-                    </Button>
-                  </Card.Body>
-                </Card>
+                <DisplayUser userId={user._id} handleEditProfile={handleEditProfile}/>
               ) : (
                 <EditUser handleEditProfile={handleEditProfile} />
               )}
@@ -67,9 +53,7 @@ const Profile = () => {
           </Tabs>
         </div>
       ) : (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <MySpinner />
       )}
     </div>
   );

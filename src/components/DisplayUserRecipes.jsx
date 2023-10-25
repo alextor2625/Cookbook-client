@@ -21,7 +21,7 @@ const DisplayUserRecipes = ({ userId }) => {
                   <Card.Body>
                     <Card.Title>Name: {recipe.name}</Card.Title>
                     <Card.Text>Category:{recipe.category}</Card.Text>
-                    <Card.Text>Description Empty For Now</Card.Text>
+                    <Card.Text>Description: {recipe.description}</Card.Text>
                     <Link key={recipe._id} to={`/recipe/${recipe._id}`}>
                       <Button variant="primary">Details</Button>
                     </Link>

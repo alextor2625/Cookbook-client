@@ -8,8 +8,7 @@ const CreateRecipe = () => {
   const [newRecipe, setNewRecipe] = useState({
     name: "",
     category: "",
-    author: "",
-    alteredBy: "",
+    description: "",
     ingredients: "",
     instructions: "",
   });
@@ -89,6 +88,17 @@ const CreateRecipe = () => {
             <option value="Holiday">Holiday</option>
             <option value="Vegetarian">Vegetarian</option>
           </Form.Select>
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label> Description: </Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={10}
+            name="description"
+            type="text"
+            value={newRecipe.description}
+            onChange={handleTextChange}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label> Ingredients: </Form.Label>
