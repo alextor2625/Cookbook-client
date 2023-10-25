@@ -1,17 +1,17 @@
-import { useContext, useEffect, useState } from "react";
-import { post } from "../services/authService";
+import { useContext, useState } from "react";
+import { del, post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
-import { AuthContext } from "../context/auth.context";
 import { ReviewsContext } from "../context/reviews.context";
+import { AuthContext } from "../context/auth.context";
 
 const EditReview = ({ reviewId, toggleForm }) => {
   const { reviews } = useContext(ReviewsContext);
-  const { authenticateUser, storeToken } = useContext(AuthContext);
+  const { authenticateUser,storeToken } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [editReview, setEditReview] = useState({
-    title: "",
-    comment: "",
-    rating: 0,
+    title: reviews.find((rvw) => reviewId == rvw._id).title,
+    comment: reviews.find((rvw) => reviewId == rvw._id).comment,
+    rating: reviews.find((rvw) => reviewId == rvw._id).rating,
   });
   const handleTextChange = (e) => {
     setEditReview((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -23,9 +23,7 @@ const EditReview = ({ reviewId, toggleForm }) => {
       post(`/reviews/update/${reviewId}`, editReview)
         .then((response) => {
           console.log(response.data);
-          storeToken(response.data.authToken);
-          authenticateUser();
-          toggleForm();
+          // toggleForm();
           window.location.reload(false);
         })
         .catch((err) => {
@@ -35,7 +33,18 @@ const EditReview = ({ reviewId, toggleForm }) => {
       setErrorMessage("Invalid Review Id.");
     }
   };
-
+const handleDelete = () => {
+  del(`/reviews/delete/${reviewId}`)
+  .then(response => {
+    console.log(response.data);
+    storeToken(response.data.authToken)
+    authenticateUser()
+    window.location.reload(false);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
   return (
     <div>
       <h1>Edit Review</h1>
@@ -82,6 +91,9 @@ const EditReview = ({ reviewId, toggleForm }) => {
       </Form>
       <Button variant="primary" onClick={toggleForm}>
         Cancel
+      </Button>
+      <Button variant="primary" onClick={handleDelete}>
+        Delete
       </Button>
     </div>
   );

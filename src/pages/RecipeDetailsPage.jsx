@@ -8,7 +8,7 @@ import CreateReview from "../components/CreateReview";
 import MySpinner from "./../components/MySpinner";
 import { AuthContext } from "../context/auth.context";
 import EditReview from "./../components/EditReview";
-
+import { put } from "../services/authService";
 const RecipeDetailsPage = () => {
   const { recipeId } = useParams();
   const { recipes } = useContext(RecipesContext);
@@ -19,17 +19,27 @@ const RecipeDetailsPage = () => {
   const [recipeReviews, setRecipeReviews] = useState([]);
   const [showCreateReviewForm, setShowCreateReviewForm] = useState(false);
   const [showEditReviewForm, setShowEditReviewForm] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState(null);
+  const [userHasReview, setUserHasReview] = useState(false);
   const toggleCreateReviewForm = () => {
     showCreateReviewForm
       ? setShowCreateReviewForm(false)
       : setShowCreateReviewForm(true);
   };
-  const toggleEditReviewForm = () => {
+
+  const handleAddRecipe = (recipeId) => {
+    put(`/recipes/add/${recipeId}`).then((response) => {
+      console.log(response.data);
+      storeToken(response.data.authToken);
+      authenticateUser();
+    });
+  };
+  const toggleEditReviewForm = (reviewId) => {
+    setSelectedReviewId(reviewId);
     showEditReviewForm
       ? setShowEditReviewForm(false)
       : setShowEditReviewForm(true);
   };
-
   useEffect(() => {
     const rcp = recipes.find((rcp) => rcp._id === recipeId);
     if (rcp) {
@@ -45,10 +55,14 @@ const RecipeDetailsPage = () => {
         });
         console.log(rvws);
         setRecipeReviews(rvws);
+        if (recipeReviews) {
+          setUserHasReview(
+            recipeReviews.find((review) => review.author._id === user._id)
+          );
+        }
       }
     }
-  }, [reviews, recipes, recipeId, users]);
-
+  }, [reviews, recipes, recipeId, users, selectedReviewId]);
   return (
     <div>
       {recipe ? (
@@ -57,6 +71,14 @@ const RecipeDetailsPage = () => {
             <Card.Img variant="top" src={recipe.image} />
             <Card.Body>
               <Card.Title>{recipe.name} Recipe</Card.Title>
+              <Card.Text>
+                {" "}
+                <Button onClick={() => handleAddRecipe(recipeId)}>
+                  Add Recipe
+                </Button>{" "}
+                <Button>CopyEdit</Button>{" "}
+              </Card.Text>
+
               <Card.Text>Category:{recipe.category}</Card.Text>
               <Card.Text>Description: {recipe.description}</Card.Text>
               {recipe.author._id == recipe.alteredBy._id && (
@@ -86,44 +108,55 @@ const RecipeDetailsPage = () => {
           <div>
             {!showCreateReviewForm ? (
               <>
-                <Button variant="primary" onClick={toggleCreateReviewForm}>
-                  Make A Review
-                </Button>
+                {!userHasReview ? (
+                  <Button variant="primary" onClick={toggleCreateReviewForm}>
+                    Make A Review
+                  </Button>
+                ) : (
+                  <Button variant="primary" disabled>
+                    Thank You For Reviewing
+                  </Button>
+                )}
                 <div>
                   Reviews:{" "}
                   {recipeReviews.length ? (
-                    recipeReviews.map((review) => {
-                      return (
-                        <div key={review._id}>
-                          <h4>
-                            <img src="" alt="" />{" "}
-                            <Link to={`/profile/${review.author._id}`}>
-                              {review.author.name}
-                            </Link>
-                          </h4>
-                          <h3>
-                            {"⭐".repeat(review.rating)} {review.title}
-                          </h3>
-                          <p>{review.comment}</p>
-
-                          {review.author._id === user._id && (
-                            <>
-                              {!showEditReviewForm.showForm ? (
-                                <Button onClick={toggleEditReviewForm}>
-                                  {" "}
-                                  Edit
-                                </Button>
-                              ) : (
-                                <EditReview
-                                  reviewId={review._id}
-                                  toggleEditReviewForm={toggleEditReviewForm}
-                                />
-                              )}
-                            </>
-                          )}
-                        </div>
-                      );
-                    })
+                    <div>
+                      {!showEditReviewForm ? (
+                        <>
+                          {recipeReviews.map((review) => {
+                            return (
+                              <div key={review._id}>
+                                <h4>
+                                  <img src="" alt="" />{" "}
+                                  <Link to={`/profile/${review.author._id}`}>
+                                    {review.author.name}
+                                  </Link>
+                                </h4>
+                                <h3>
+                                  {"⭐".repeat(review.rating)} {review.title}
+                                </h3>
+                                <p>{review.comment}</p>
+                                {userHasReview && (
+                                  <Button
+                                    onClick={() =>
+                                      toggleEditReviewForm(review._id)
+                                    }
+                                  >
+                                    {" "}
+                                    Edit
+                                  </Button>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <EditReview
+                          reviewId={selectedReviewId}
+                          toggleForm={toggleEditReviewForm}
+                        />
+                      )}
+                    </div>
                   ) : (
                     <span>No Reviews</span>
                   )}
@@ -143,5 +176,4 @@ const RecipeDetailsPage = () => {
     </div>
   );
 };
-
 export default RecipeDetailsPage;

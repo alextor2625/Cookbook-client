@@ -11,12 +11,12 @@ const ExplorePage = () => {
       <h1>Explore</h1>
       {users.map((user) => {
         return (
-          <Card style={{ width: "25rem" }} name="profile">
+          <Card key={user._id} style={{ width: "25rem" }} name="profile">
             <Card.Img variant="top" src={user.image} />
             <Card.Body>
               <Card.Title>Name: {user.name}</Card.Title>
             </Card.Body>
-            <Link key={user._id} to={`/profile/${user._id}`}>
+            <Link  to={`/profile/${user._id}`}>
               <Button variant="primary">Details</Button>
             </Link>
           </Card>

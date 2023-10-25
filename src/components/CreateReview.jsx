@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
