@@ -39,7 +39,7 @@ const CreateReview = ({ recipeId, toggleForm }) => {
 
   return (
     <div>
-      <h1>Make A Review</h1>
+      <h1 style={{textAlign:"center"}}>Make A Review</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label> Title: </Form.Label>
@@ -78,13 +78,17 @@ const CreateReview = ({ recipeId, toggleForm }) => {
         </Form.Group>
         {errorMessage && <p>{errorMessage}</p>}
 
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+        <div className="center">
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </div>
       </Form>
-      <Button variant="primary" onClick={toggleForm}>
-        Cancel
-      </Button>
+      <div className="center">
+        <Button variant="primary" onClick={toggleForm}>
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 };

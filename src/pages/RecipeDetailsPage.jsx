@@ -30,8 +30,8 @@ const RecipeDetailsPage = () => {
   const handleAddRecipe = (recipeId) => {
     put(`/recipes/add/${recipeId}`).then((response) => {
       console.log(response.data);
-      storeToken(response.data.authToken);
-      authenticateUser();
+      // storeToken(response.data.authToken);
+      // authenticateUser();
     });
   };
   const toggleEditReviewForm = (reviewId) => {
@@ -64,12 +64,12 @@ const RecipeDetailsPage = () => {
     }
   }, [reviews, recipes, recipeId, users, selectedReviewId]);
   return (
-    <div>
+    <div className="center">
       {recipe ? (
         <div>
           <Card key={recipe._id} style={{ width: "30rem" }}>
-            <Card.Img variant="top" src={recipe.image} />
-            <Card.Body>
+            <Card.Img variant="top" src={recipe.image} style={{width: "20em"}} className="center-image"/>
+            <Card.Body className="center-card-text">
               <Card.Title>{recipe.name} Recipe</Card.Title>
               <Card.Text>
                 {" "}
@@ -109,15 +109,19 @@ const RecipeDetailsPage = () => {
             {!showCreateReviewForm ? (
               <>
                 {!userHasReview ? (
-                  <Button variant="primary" onClick={toggleCreateReviewForm}>
-                    Make A Review
-                  </Button>
+                  <div className="center">
+                    <Button variant="primary" onClick={toggleCreateReviewForm}>
+                      Make A Review
+                    </Button>
+                  </div>
                 ) : (
-                  <Button variant="primary" disabled>
-                    Thank You For Reviewing
-                  </Button>
+                  <div className="center">
+                    <Button variant="primary" disabled>
+                      Thank You For Reviewing
+                    </Button>
+                  </div>
                 )}
-                <div>
+                <div className="center">
                   Reviews:{" "}
                   {recipeReviews.length ? (
                     <div>

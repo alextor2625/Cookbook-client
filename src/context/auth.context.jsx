@@ -57,7 +57,7 @@ function AuthProvider({ children }) {
   }
  
   const logOutUser = () => {
-    navigate('/')      
+    // navigate('/')      
                  // <== ADD    
     // To log out the user, remove the token
     removeToken();
