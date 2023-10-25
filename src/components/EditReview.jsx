@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { ReviewsContext } from "../context/reviews.context";
 import { AuthContext } from "../context/auth.context";
 
-const EditReview = ({ reviewId, toggleForm }) => {
+const EditReview = ({ recipeId, reviewId, toggleForm }) => {
   const { reviews } = useContext(ReviewsContext);
   const { authenticateUser,storeToken } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,7 +34,7 @@ const EditReview = ({ reviewId, toggleForm }) => {
     }
   };
 const handleDelete = () => {
-  del(`/reviews/delete/${reviewId}`)
+  del(`/reviews/delete/${recipeId}/${reviewId}`)
   .then(response => {
     console.log(response.data);
     storeToken(response.data.authToken)
