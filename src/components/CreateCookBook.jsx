@@ -6,7 +6,7 @@ import { uploadImg } from "../services/uploadService";
 
 const CreateCookBook = () => {
   const [newCookBook, setNewCookBook] = useState({
-    name: ""
+    name: "",
   });
   const [file, setFile] = useState(null);
   const { authenticateUser, storeToken } = useContext(AuthContext);
@@ -20,11 +20,15 @@ const CreateCookBook = () => {
     e.preventDefault();
     if (file) {
       uploadImg(file).then((response) => {
-        post("/cookbooks/create", { ...newCookBook, image: response.data.fileUrl })
+        post("/cookbooks/create", {
+          ...newCookBook,
+          image: response.data.fileUrl,
+        })
           .then((response) => {
             console.log(response.data);
             storeToken(response.data.authToken);
             authenticateUser();
+            window.location.reload(false);
           })
           .catch((err) => {
             console.log(err);
@@ -36,6 +40,7 @@ const CreateCookBook = () => {
           console.log(response.data);
           storeToken(response.data.authToken);
           authenticateUser();
+          window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);

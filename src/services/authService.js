@@ -16,10 +16,10 @@ export const post = (route, body) => {
     headers: { Authorization: `Bearer ${token}` },
   })
 };
-export const put = (route) => {
+export const put = (route, id) => {
   let token = localStorage.getItem("authToken");
 
-  return axios.put(API_URL + route, {
+  return axios.put(API_URL + route, id, {
     headers: { Authorization: `Bearer ${token}` },
   })
 };

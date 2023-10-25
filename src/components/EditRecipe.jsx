@@ -1,21 +1,22 @@
 import { useContext, useState } from "react";
 import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
-import { AuthContext } from "../context/auth.context";
 import { uploadImg } from "../services/uploadService";
+import { RecipesContext } from "../context/recipes.context";
 
-const CreateRecipe = () => {
-  const [newRecipe, setNewRecipe] = useState({
-    name: "",
-    category: "",
-    description: "",
-    ingredients: "",
-    instructions: "",
-  });
+const EditRecipe = ({ recipeId, toggleForm }) => {
+  const { recipes } = useContext(RecipesContext);
+  const [errorMessage, setErrorMessage] = useState(undefined);
   const [file, setFile] = useState(null);
-  const { authenticateUser, storeToken } = useContext(AuthContext);
+  const [recipeEdit, setRecipeEdit] = useState({
+    name: recipes.find((rcp) => recipeId == rcp._id).name,
+    category: recipes.find((rcp) => recipeId == rcp._id).category,
+    description: recipes.find((rcp) => recipeId == rcp._id).description,
+    ingredients: recipes.find((rcp) => recipeId == rcp._id).ingredients,
+    instructions: recipes.find((rcp) => recipeId == rcp._id).instructions,
+  });
   const handleTextChange = (e) => {
-    setNewRecipe((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setRecipeEdit((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleFile = (e) => setFile(e.target.files[0]);
@@ -24,25 +25,24 @@ const CreateRecipe = () => {
     e.preventDefault();
     if (file) {
       uploadImg(file).then((response) => {
-        post("/recipes/create", { ...newRecipe, image: response.data.fileUrl })
+        post(`/recipes/update/${recipeId}`, {
+          ...recipeEdit,
+          image: response.data.fileUrl,
+        })
           .then((response) => {
             console.log(response.data);
-            storeToken(response.data.authToken);
-            authenticateUser();
             window.location.reload(false);
           })
-          .catch((err) => {
-            console.log(err);
+          .catch((error) => {
+            setErrorMessage(error.response.data.message);
           });
       });
     } else {
-      post("/recipes/create", newRecipe)
+      post(`/recipes/update/${recipeId}`, recipeEdit)
         .then((response) => {
           console.log(response.data);
-          storeToken(response.data.authToken);
-          authenticateUser();
+          toggleForm();
           window.location.reload(false);
-
         })
         .catch((err) => {
           console.log(err);
@@ -52,8 +52,8 @@ const CreateRecipe = () => {
 
   return (
     <div>
-      <h1>New Recipe</h1>
-      <Form onSubmit={handleSubmit}>
+      <h1 style={{ textAlign: "center" }}>Recipe Edit</h1>
+      <Form onSubmit={handleSubmit} className="container">
         <Form.Group className="mb-3">
           <Form.Label className="form-label">Recipe Image</Form.Label>
           <Form.Control
@@ -69,14 +69,17 @@ const CreateRecipe = () => {
           <Form.Control
             name="name"
             type="text"
-            value={newRecipe.name}
+            value={recipeEdit.name}
             onChange={handleTextChange}
           />
         </Form.Group>
+
         <Form.Group className="mb-3">
-          <Form.Label>Category: </Form.Label>
-          <Form.Select name="category" onChange={handleTextChange}>
-            <option value=""></option>
+          <Form.Label> Category: </Form.Label>
+          <Form.Select name="category" type="text" onChange={handleTextChange}>
+            <option value={recipeEdit.category} selected disabled>
+              {recipeEdit.category}
+            </option>
             <option value="Breakfast">Breakfast</option>
             <option value="Lunch">Lunch</option>
             <option value="Dinner">Dinner</option>
@@ -99,39 +102,47 @@ const CreateRecipe = () => {
             rows={10}
             name="description"
             type="text"
-            value={newRecipe.description}
+            value={recipeEdit.description}
             onChange={handleTextChange}
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label> Ingredients: </Form.Label>
+          <Form.Label> ingredients: </Form.Label>
           <Form.Control
             as="textarea"
             rows={10}
             name="ingredients"
             type="text"
-            value={newRecipe.ingredients}
+            value={recipeEdit.ingredients}
             onChange={handleTextChange}
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label> Instructions: </Form.Label>
+          <Form.Label> instructions: </Form.Label>
           <Form.Control
             as="textarea"
             rows={10}
             name="instructions"
             type="text"
-            value={newRecipe.instructions}
+            value={recipeEdit.instructions}
             onChange={handleTextChange}
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+        <div className="center">
+          <Button variant="primary" type="submit">
+            Save
+          </Button>
+        </div>
       </Form>
+      <div className="center">
+        <Button variant="primary" onClick={toggleForm}>
+          Cancel
+        </Button>
+      </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };
 
-export default CreateRecipe;
+export default EditRecipe;

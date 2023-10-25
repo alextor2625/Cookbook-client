@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
 import { uploadImg } from "../services/uploadService";
 
-const EditUser = ({handleEditProfile}) => {
+const EditUser = ({ handleEditProfile }) => {
   const { user, authenticateUser, storeToken } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState(undefined);
   const [file, setFile] = useState(null);
@@ -27,6 +27,7 @@ const EditUser = ({handleEditProfile}) => {
             console.log(response.data);
             storeToken(response.data.authToken);
             authenticateUser();
+            window.location.reload(false);
           })
           .catch((error) => {
             setErrorMessage(error.response.data.message);
@@ -38,7 +39,8 @@ const EditUser = ({handleEditProfile}) => {
           console.log(response.data);
           storeToken(response.data.authToken);
           authenticateUser();
-          handleEditProfile()
+          handleEditProfile();
+          window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
@@ -82,11 +84,10 @@ const EditUser = ({handleEditProfile}) => {
         <Button variant="primary" type="submit">
           Save
         </Button>
-
       </Form>
-        <Button variant="primary" onClick={handleEditProfile}>
-          Cancel
-        </Button>
+      <Button variant="primary" onClick={handleEditProfile}>
+        Cancel
+      </Button>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );

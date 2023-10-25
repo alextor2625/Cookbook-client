@@ -8,19 +8,27 @@ import CreateReview from "../components/CreateReview";
 import MySpinner from "./../components/MySpinner";
 import { AuthContext } from "../context/auth.context";
 import EditReview from "./../components/EditReview";
-import { put } from "../services/authService";
+import { del, put } from "../services/authService";
+import EditRecipe from "../components/EditRecipe";
 const RecipeDetailsPage = () => {
   const { recipeId } = useParams();
   const { recipes } = useContext(RecipesContext);
   const { reviews } = useContext(ReviewsContext);
   const { users } = useContext(UsersContext);
-  const { user } = useContext(AuthContext);
+  const { user, storeToken, authenticateUser } = useContext(AuthContext);
   const [recipe, setRecipe] = useState(null);
   const [recipeReviews, setRecipeReviews] = useState([]);
   const [showCreateReviewForm, setShowCreateReviewForm] = useState(false);
   const [showEditReviewForm, setShowEditReviewForm] = useState(false);
+  const [showEditRecipeForm, setShowEditRecipeForm] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(null);
   const [userHasReview, setUserHasReview] = useState(false);
+
+  const toggleEditRecipeForm = () => {
+    showEditRecipeForm
+      ? setShowEditRecipeForm(false)
+      : setShowEditRecipeForm(true);
+  };
   const toggleCreateReviewForm = () => {
     showCreateReviewForm
       ? setShowCreateReviewForm(false)
@@ -28,10 +36,17 @@ const RecipeDetailsPage = () => {
   };
 
   const handleAddRecipe = (recipeId) => {
-    put(`/recipes/add/${recipeId}`).then((response) => {
+    put(`/recipes/add`, { recipeId }).then((response) => {
       console.log(response.data);
-      // storeToken(response.data.authToken);
-      // authenticateUser();
+      storeToken(response.data.authToken);
+      authenticateUser();
+    });
+  };
+  const handleRemoveRecipe = (recipeId) => {
+    del(`/recipes/remove/${recipeId}`).then((response) => {
+      console.log(response.data);
+      storeToken(response.data.authToken);
+      authenticateUser();
     });
   };
   const toggleEditReviewForm = (reviewId) => {
@@ -67,48 +82,83 @@ const RecipeDetailsPage = () => {
     <div className="center">
       {recipe ? (
         <div>
-          <Card key={recipe._id} style={{ width: "30rem" }}>
-            <Card.Img variant="top" src={recipe.image} style={{width: "20em"}} className="center-image"/>
-            <Card.Body className="center-card-text">
-              <Card.Title>{recipe.name} Recipe</Card.Title>
-              <Card.Text>
-                {" "}
-                <Button onClick={() => handleAddRecipe(recipeId)}>
-                  Add Recipe
-                </Button>{" "}
-                <Button>CopyEdit</Button>{" "}
-              </Card.Text>
+          {!showEditRecipeForm ? (
+            <>
+              <Card key={recipe._id} style={{ width: "30rem" }}>
+                <Card.Img
+                  variant="top"
+                  src={recipe.image}
+                  style={{ width: "20em" }}
+                  className="center-image"
+                />
+                <Card.Body className="center-card-text">
+                  <Card.Title>{recipe.name} Recipe</Card.Title>
+                  <Card.Text>
+                    {" "}
+                    {!(
+                      recipe.author._id == user._id ||
+                      recipe.alteredBy._id == user._id
+                    ) && (
+                      <>
+                        {!user.recipes.find((rcp) => recipe._id == rcp._id) ? (
+                          <>
+                            <Button onClick={() => handleAddRecipe(recipeId)}>
+                              Add Recipe
+                            </Button>{" "}
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              onClick={() => handleRemoveRecipe(recipeId)}
+                            >
+                              Remove Recipe
+                            </Button>{" "}
+                          </>
+                        )}
+                      </>
+                    )}
+                    <Button>CopyEdit</Button>{" "}
+                  </Card.Text>
 
-              <Card.Text>Category:{recipe.category}</Card.Text>
-              <Card.Text>Description: {recipe.description}</Card.Text>
-              {recipe.author._id == recipe.alteredBy._id && (
-                <Card.Text>
-                  Created By:{" "}
-                  <Link to={`/profile/${recipe.author._id}`}>
-                    {recipe.author.name}
-                  </Link>
-                </Card.Text>
-              )}
-              {recipe.author._id != recipe.alteredBy._id && (
-                <Card.Text>
-                  Altered By:{" "}
-                  <Link to={`/profile/${recipe.alteredBy._id}`}>
-                    {recipe.alteredBy.name}
-                  </Link>
-                </Card.Text>
-              )}
-              <Card.Text>
-                Ingredients: <span>{recipe.ingredients}</span>
-              </Card.Text>
-              <Card.Text>
-                Instructions: <span>{recipe.instructions}</span>
-              </Card.Text>
-            </Card.Body>
-          </Card>
+                  <Card.Text>Category:{recipe.category}</Card.Text>
+                  <Card.Text>Description: {recipe.description}</Card.Text>
+                  {recipe.author._id == recipe.alteredBy._id && (
+                    <Card.Text>
+                      Created By:{" "}
+                      <Link to={`/profile/${recipe.author._id}`}>
+                        {recipe.author.name}
+                      </Link>
+                    </Card.Text>
+                  )}
+                  {recipe.author._id != recipe.alteredBy._id && (
+                    <Card.Text>
+                      Altered By:{" "}
+                      <Link to={`/profile/${recipe.alteredBy._id}`}>
+                        {recipe.alteredBy.name}
+                      </Link>
+                    </Card.Text>
+                  )}
+                  <Card.Text>
+                    Ingredients: <span>{recipe.ingredients}</span>
+                  </Card.Text>
+                  <Card.Text>
+                    Instructions: <span>{recipe.instructions}</span>
+                  </Card.Text>
+                  {recipe.alteredBy._id == user._id && (
+                    <Card.Text>
+                      <Button onClick={toggleEditRecipeForm}>Edit</Button>
+                    </Card.Text>
+                  )}
+                </Card.Body>
+              </Card>
+            </>
+          ) : (
+            <EditRecipe recipeId={recipeId} toggleForm={toggleEditRecipeForm} />
+          )}
           <div>
             {!showCreateReviewForm ? (
               <>
-                {!userHasReview ? (
+                {!((recipe.author._id == user._id)||(recipe.alteredBy._id == user._id)) ? (!userHasReview ? (
                   <div className="center">
                     <Button variant="primary" onClick={toggleCreateReviewForm}>
                       Make A Review
@@ -120,7 +170,13 @@ const RecipeDetailsPage = () => {
                       Thank You For Reviewing
                     </Button>
                   </div>
-                )}
+                )):
+                <div className="center">
+                    <Button variant="primary" disabled>
+                      You Own This Recipe
+                    </Button>
+                  </div>
+                }
                 <div className="center">
                   Reviews:{" "}
                   {recipeReviews.length ? (
