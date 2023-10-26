@@ -10,6 +10,7 @@ import BrowseRecipesPage from "./pages/BrowseRecipesPage";
 import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 import UserDetailsPage from "./pages/UserDetailsPage";
 import "bootstrap/dist/css/bootstrap.min.css";
+import CookbookDetailsPage from "./pages/CookbookDetailsPage";
 function App() {
   const getToken = () => {
     return localStorage.getItem("authToken");
@@ -34,8 +35,9 @@ function App() {
         </Route>
         <Route element={<LoggedIn />}>
           <Route path="/profile" element={<Profile />} />
-          <Route path="/recipe/:recipeId" element={<RecipeDetailsPage />} />
           <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/cookbook/:cookbookId" element={<CookbookDetailsPage />} />
+          <Route path="/recipe/:recipeId" element={<RecipeDetailsPage />} />
           <Route path="/profile/:profileId" element={<UserDetailsPage />} />
         </Route>
       </Routes>

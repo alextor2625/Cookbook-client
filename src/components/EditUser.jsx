@@ -62,50 +62,71 @@ const navigate = useNavigate()
   };
 
   return (
-    <div>
-      <h1>Profile Edit</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label className="form-label">Profile Image</Form.Label>
-          <Form.Control
-            className="form-control"
-            name="image"
-            type="file"
-            onChange={handleFile}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label> Name: </Form.Label>
-          <Form.Control
-            name="name"
-            type="text"
-            value={userEdit.name}
-            onChange={handleTextChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label> Email: </Form.Label>
-          <Form.Control
-            name="email"
-            type="email"
-            value={userEdit.email}
-            onChange={handleTextChange}
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
+    <div className="container">
+    <h1 className="text-center">Profile Edit</h1>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group className="mb-3 text-center">
+        <Form.Label className="form-label">Image</Form.Label>
+        <div className="row justify-content-center">
+          <div className="col-3">
+            <Form.Control
+              className="form-control text-center"
+              name="image"
+              type="file"
+              onChange={handleFile}
+            />
+          </div>
+        </div>
+      </Form.Group>
+  
+      <Form.Group className="mb-3 text-center">
+        <Form.Label>Name:</Form.Label>
+        <div className="row justify-content-center">
+          <div className="col-3"> {/* Adjust the column width */}
+            <Form.Control
+              className="form-control text-center"
+              name="name"
+              type="text"
+              value={userEdit.name}
+              onChange={handleTextChange}
+            />
+          </div>
+        </div>
+      </Form.Group>
+      <Form.Group className="mb-3 text-center">
+        <Form.Label>Email:</Form.Label>
+        <div className="row justify-content-center">
+          <div className="col-3"> {/* Adjust the column width */}
+            <Form.Control
+              className="form-control text-center"
+              name="email"
+              type="email"
+              value={userEdit.email}
+              onChange={handleTextChange}
+            />
+          </div>
+        </div>
+      </Form.Group>
+  
+      <div className="d-flex justify-content-center">
+        <Button variant="primary" type="submit" className="me-2">
           Save
         </Button>
-      </Form>
-      <Button variant="primary" onClick={handleEditProfile}>
-        Cancel
-      </Button>
-      <Button variant="primary" onClick={deleteUser}>
-        Delete User
-      </Button>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-    </div>
+        <Button variant="secondary" onClick={handleEditProfile} className="me-2">
+          Cancel
+        </Button>
+        <Button variant="danger" onClick={deleteUser}>
+          Delete User
+        </Button>
+      </div>
+  
+      {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
+    </Form>
+  </div>
+  
+
+  
+
   );
 };
 

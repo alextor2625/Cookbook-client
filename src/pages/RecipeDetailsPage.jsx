@@ -7,6 +7,7 @@ import { Button, Card } from "react-bootstrap";
 import CreateReview from "../components/CreateReview";
 import MySpinner from "./../components/MySpinner";
 import { AuthContext } from "../context/auth.context";
+import { CookbooksContext } from "../context/cookbooks.context";
 import EditReview from "./../components/EditReview";
 import { del, put } from "../services/authService";
 import EditRecipe from "../components/EditRecipe";
@@ -16,6 +17,7 @@ const RecipeDetailsPage = () => {
   const { recipes } = useContext(RecipesContext);
   const { reviews } = useContext(ReviewsContext);
   const { users } = useContext(UsersContext);
+  const {setNewCookbook } = useContext(CookbooksContext);
   const { user, storeToken, authenticateUser } = useContext(AuthContext);
   const [recipe, setRecipe] = useState(null);
   const [recipeReviews, setRecipeReviews] = useState([]);
@@ -44,6 +46,7 @@ const RecipeDetailsPage = () => {
       : setShowCreateReviewForm(true);
   };
 
+  
   const handleAddRecipe = (recipeId) => {
     put(`/recipes/add`, { recipeId }).then((response) => {
       console.log(response.data);
@@ -97,7 +100,7 @@ const RecipeDetailsPage = () => {
         }
       }
     }
-  }, [reviews, recipes, recipeId, users, selectedReviewId]);
+  }, [reviews, recipes, recipeId, users, selectedReviewId, user]);
   return (
     <div className="center">
       {recipe ? (
