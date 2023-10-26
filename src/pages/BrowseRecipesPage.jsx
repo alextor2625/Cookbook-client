@@ -26,10 +26,10 @@ const BrowseRecipesPage = () => {
                     />
                     <Card.Body className="d-flex flex-column">
                       <Card.Title>Name: {recipe.name}</Card.Title>
-                      <Card.Text>Category:{recipe.category}</Card.Text>
-                      <Card.Text>Description Empty For Now</Card.Text>
+                      <Card.Text>Category: {recipe.category}</Card.Text>
+                      <Card.Text>Description: {recipe.description}</Card.Text>
                       {recipe.author._id == recipe.alteredBy._id ? (
-                        <Card.Text>Created By:{recipe.author.name}</Card.Text>
+                        <Card.Text>Created By: {recipe.author.name}</Card.Text>
                       ) : (
                         <Card.Text>
                           Last Edited By:{recipe.alteredBy.name}

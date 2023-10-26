@@ -67,7 +67,7 @@ const CopyEditRecipe = ({ recipeId, toggleForm }) => {
 
   return (
     <div>
-      <h1 style={{ textAlign: "center" }}>Recipe Edit</h1>
+      <h1 style={{ textAlign: "center" }}>Copy Edit Recipe</h1>
       <Form onSubmit={handleSubmit} className="container">
         <Form.Group className="mb-3">
           <Form.Label className="form-label">Recipe Image</Form.Label>
@@ -91,10 +91,7 @@ const CopyEditRecipe = ({ recipeId, toggleForm }) => {
 
         <Form.Group className="mb-3">
           <Form.Label> Category: </Form.Label>
-          <Form.Select name="category" type="text" onChange={handleTextChange}>
-            <option value={recipeEdit.category} selected disabled>
-              {recipeEdit.category}
-            </option>
+          <Form.Select name="category" type="text" defaultValue={recipeEdit.category} onChange={handleTextChange}>
             <option value="Breakfast">Breakfast</option>
             <option value="Lunch">Lunch</option>
             <option value="Dinner">Dinner</option>
