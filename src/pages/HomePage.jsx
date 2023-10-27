@@ -13,9 +13,9 @@ const HomePage = () => {
             alt="HomePageLogo"
             className="img-fluid"
           />
-          <p>
+          {/* <p>
             <Button variant="primary">Get Started</Button>
-          </p>
+          </p> */}
         </Col>
       </Row>
     </Container>
