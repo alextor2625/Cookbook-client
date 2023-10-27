@@ -33,6 +33,9 @@ const RecipeDetailsPage = () => {
 
   const navigate = useNavigate();
 
+  // const toggleUserHasReview = () => {
+  //   userHasReview ? setUserHasReview(false) : setUserHasReview(true);
+  // };
   const toggleCopyEditRecipeForm = () => {
     showCopyEditRecipeForm
       ? setShowCopyEditRecipeForm(false)
@@ -98,10 +101,10 @@ const RecipeDetailsPage = () => {
   const calcAvg = (reviewsArr) => {
     let sum = 0;
     reviewsArr.forEach((review) => {
-      sum+=review.rating
-        })
-        return Math.ceil(sum/reviewsArr.length)
-  }
+      sum += review.rating;
+    });
+    return Math.ceil(sum / reviewsArr.length);
+  };
   useEffect(() => {
     const rcp = recipes.find((rcp) => rcp._id === recipeId);
     if (rcp) {
@@ -115,14 +118,13 @@ const RecipeDetailsPage = () => {
           }
           return rvw;
         });
-        const avg = calcAvg(rvws)
-        setRatingAvg(avg)
+        const avg = calcAvg(rvws);
+        setRatingAvg(avg);
         console.log(rvws);
         setRecipeReviews(rvws);
         if (recipeReviews) {
-          setUserHasReview(
-            recipeReviews.find((review) => review.author._id === user._id)
-          );
+          if (recipeReviews.find((review) => review.author._id === user._id))
+            setUserHasReview(true);
         }
       }
     }
@@ -179,7 +181,11 @@ const RecipeDetailsPage = () => {
                     </Card.Text>
 
                     <Card.Text>Category: {recipe.category}</Card.Text>
-                    {ratingAvg? <Card.Text>Rating: {"⭐".repeat(ratingAvg)}</Card.Text> : <Card.Text>No Ratings Yet</Card.Text>}
+                    {ratingAvg ? (
+                      <Card.Text>Rating: {"⭐".repeat(ratingAvg)}</Card.Text>
+                    ) : (
+                      <Card.Text>No Ratings Yet</Card.Text>
+                    )}
                     {recipe.author._id == recipe.alteredBy._id && (
                       <Card.Text>
                         Created By:{" "}
@@ -196,16 +202,42 @@ const RecipeDetailsPage = () => {
                         </Link>
                       </Card.Text>
                     )}
-                    <Card.Text ><h3><strong>Description:</strong></h3> <br/></Card.Text>
-                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">{recipe.description}</Card.Text>
-                    <Card.Text >
-                    <h3><strong>Ingredients:</strong></h3> <br/>
+                    <Card.Text>
+                      <h3>
+                        <strong>Description:</strong>
+                      </h3>{" "}
+                      <br />
                     </Card.Text>
-                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">{recipe.ingredients}</Card.Text>
+                    <Card.Text
+                      style={{ textAlign: "justify" }}
+                      className="preserve-newline"
+                    >
+                      {recipe.description}
+                    </Card.Text>
+                    <Card.Text>
+                      <h3>
+                        <strong>Ingredients:</strong>
+                      </h3>{" "}
+                      <br />
+                    </Card.Text>
+                    <Card.Text
+                      style={{ textAlign: "justify" }}
+                      className="preserve-newline"
+                    >
+                      {recipe.ingredients}
+                    </Card.Text>
                     <Card.Text className="preserve-newline">
-                      <h3><strong>Instructions</strong>:</h3> <br/>
+                      <h3>
+                        <strong>Instructions</strong>:
+                      </h3>{" "}
+                      <br />
                     </Card.Text>
-                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">{recipe.instructions}</Card.Text>
+                    <Card.Text
+                      style={{ textAlign: "justify" }}
+                      className="preserve-newline"
+                    >
+                      {recipe.instructions}
+                    </Card.Text>
                     {recipe.alteredBy._id == user._id && (
                       <Card.Text>
                         <Button onClick={toggleEditRecipeForm}>Edit</Button>
@@ -234,7 +266,7 @@ const RecipeDetailsPage = () => {
                     recipe.author._id == user._id ||
                     recipe.alteredBy._id == user._id
                   ) ? (
-                    userHasReview ? (
+                    !userHasReview ? (
                       <div className="center">
                         <Button
                           variant="primary"
@@ -280,7 +312,9 @@ const RecipeDetailsPage = () => {
                                   <Card.Subtitle>
                                     {"⭐".repeat(review.rating)} {review.title}
                                   </Card.Subtitle>
-                                  <Card.Text className="preserve-newline">{review.comment}</Card.Text>
+                                  <Card.Text className="preserve-newline">
+                                    {review.comment}
+                                  </Card.Text>
                                   {userHasReview && (
                                     <Button
                                       variant="primary"
