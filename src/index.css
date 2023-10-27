@@ -13,3 +13,7 @@
   margin-right: auto;
   width: 50%;
 }
+
+.preserve-newline{
+  white-space: pre-wrap;
+}

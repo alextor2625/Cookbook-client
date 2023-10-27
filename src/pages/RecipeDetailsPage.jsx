@@ -188,7 +188,7 @@ const RecipeDetailsPage = () => {
                     <Card.Text>
                     Ingredients: <br/><span>{recipe.ingredients}</span>
                     </Card.Text>
-                    <Card.Text>
+                    <Card.Text className="preserve-newline">
                       Instructions: <br/><span>{recipe.instructions}</span>
                     </Card.Text>
                     {recipe.alteredBy._id == user._id && (
