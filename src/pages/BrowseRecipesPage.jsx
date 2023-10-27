@@ -6,7 +6,6 @@ import MySpinner from "../components/MySpinner";
 
 const BrowseRecipesPage = () => {
   const { recipes } = useContext(RecipesContext);
-  console.log(recipes);
 
   return (
     <div>

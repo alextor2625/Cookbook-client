@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
 
 
-const Navbar = () => {
+const Nabar = () => {
   const { logOutUser } = useContext(AuthContext);
-  const navigate = useNavigate();
   const getToken = () => {
     return localStorage.getItem("authToken");
   };
@@ -17,28 +17,44 @@ const Navbar = () => {
   };
   
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <NavLink to="/" className="navbar-brand">
+    <Navbar bg="primary" expand="lg" variant="dark">
+      <Container>
+        <Navbar.Brand as={NavLink} to="/">
           CookBook
-        </NavLink>
-        {getToken() ? (
-          <>
-            <NavLink to="/profile">Profile</NavLink>
-            <NavLink onClick={handleLogOut} to={'/'}>Logout</NavLink>
-            <NavLink to="/explore">Explore</NavLink>
-          </>
-        ) : (
-          <>
-            <NavLink to="/signup">Signup</NavLink>
-            <NavLink to="/login">Login</NavLink>
-          </>
-        )}
-        <NavLink to="/browse/recipes">Browse Recipes</NavLink>
-
-      </div>
-    </nav>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            {getToken() ? (
+              <>
+                <Nav.Link as={NavLink} to="/profile">
+                  Profile
+                </Nav.Link>
+                <Nav.Link onClick={handleLogOut} as={NavLink} to="/">
+                  Logout
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/explore">
+                  Explore
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link as={NavLink} to="/signup">
+                  Signup
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/login">
+                  Login
+                </Nav.Link>
+              </>
+            )}
+            <Nav.Link as={NavLink} to="/browse/recipes">
+              Browse Recipes
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default Nabar;

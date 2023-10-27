@@ -16,7 +16,7 @@ const Signup = () => {
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const { authenticateUser, storeToken } = useContext(AuthContext);
-  const { setNewUser } = useContext(UsersContext);
+  const { setNewUsers } = useContext(UsersContext);
 
   const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ const Signup = () => {
             .then((response) => {
               storeToken(response.data.authToken);
               authenticateUser();
-              setNewUser(true);
+              setNewUsers(true);
               navigate("/profile");
             })
             .catch((error) => {
@@ -80,7 +80,7 @@ const Signup = () => {
         .then((response) => {
           storeToken(response.data.authToken);
           authenticateUser();
-          setNewUser(true);
+          setNewUsers(true);
           navigate("/profile");
         })
         .catch((error) => {

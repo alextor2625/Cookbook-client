@@ -5,21 +5,21 @@ const UsersContext = createContext();
 
 const UsersProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState(false);
+  const [newUsers, setNewUsers] = useState(false);
 
   useEffect(() => {
     get("/users/profiles")
       .then((response) => {
         console.log("Users Context Response Data", response.data);
-        setNewUser(false)
+        setNewUsers(false)
         setUsers(response.data);
       })
       .catch((err) => {
         console.log("Error getting User Data In Context", err);
       });
-  }, [newUser]);
+  }, [newUsers]);
   return (
-    <UsersContext.Provider value={{ users, setUsers, setNewUser }}>
+    <UsersContext.Provider value={{ users, setUsers, setNewUsers }}>
         {children}
     </UsersContext.Provider>
   );

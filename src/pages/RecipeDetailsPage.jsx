@@ -69,12 +69,12 @@ const RecipeDetailsPage = () => {
       setNewCookbook(true)
       setNewReview(true)
       setNewUsers(true)
-      // window.location.reload(false);
+      window.location.reload(false);
     });
   };
   const handleDeleteRecipe = (recipeId) => {
     del(`/recipes/delete/${recipeId}`).then((response) => {
-      console.log(response.data);
+      console.log("Recipe Deleted",response.data);
       storeToken(response.data.authToken);
       authenticateUser();
       navigate("/profile");
@@ -83,7 +83,7 @@ const RecipeDetailsPage = () => {
       setNewReview(true)
       setNewUsers(true)
       // window.location.reload(false);
-    });
+    }).catch(error => console.log(error))
   };
   const toggleEditReviewForm = (reviewId) => {
     setSelectedReviewId(reviewId);

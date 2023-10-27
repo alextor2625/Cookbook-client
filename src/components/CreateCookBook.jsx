@@ -1,19 +1,27 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
 import { uploadImg } from "../services/uploadService";
 import { CookbooksContext } from "../context/cookbooks.context";
+import { ReviewsContext } from "../context/reviews.context";
+import { UsersContext } from "../context/users.context";
 
 const CreateCookBook = () => {
   const [createNewCookBook, setCreateNewCookBook] = useState({
     name: "",
   });
   const [file, setFile] = useState(null);
-  const { authenticateUser, storeToken } = useContext(AuthContext);
-  const { setNewCookBook } = useContext(CookbooksContext);
+  const { user, setNewUser, authenticateUser, storeToken } =
+    useContext(AuthContext);
+  const { cookbooks, setNewCookbook } = useContext(CookbooksContext);
+  const { setNewReview } = useContext(ReviewsContext);
+  const { setNewUsers } = useContext(UsersContext);
   const handleTextChange = (e) => {
-    setCreateNewCookBook((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setCreateNewCookBook((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleFile = (e) => setFile(e.target.files[0]);
@@ -30,7 +38,11 @@ const CreateCookBook = () => {
             console.log(response.data);
             storeToken(response.data.authToken);
             authenticateUser();
-            setNewCookBook(true)
+            setNewCookbook(true);
+            setNewUser(true);
+            setNewReview(true);
+            setNewUsers(true);
+
             // window.location.reload(false);
           })
           .catch((err) => {
@@ -43,7 +55,10 @@ const CreateCookBook = () => {
           console.log(response.data);
           storeToken(response.data.authToken);
           authenticateUser();
-          setNewCookBook(true)
+          setNewCookbook(true);
+          setNewUser(true);
+          setNewReview(true);
+          setNewUsers(true);
           // window.location.reload(false);
         })
         .catch((err) => {
@@ -51,7 +66,9 @@ const CreateCookBook = () => {
         });
     }
   };
-
+  useEffect(() => {
+    console.log("Reloading");
+  }, [cookbooks, user]);
   return (
     <div>
       <h1>New CookBook</h1>
