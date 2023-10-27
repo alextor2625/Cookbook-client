@@ -167,8 +167,8 @@ const RecipeDetailsPage = () => {
                       </Button>
                     </Card.Text>
 
-                    <Card.Text>Category:{recipe.category}</Card.Text>
-                    <Card.Text>Description: {recipe.description}</Card.Text>
+                    <Card.Text>Category: {recipe.category}</Card.Text>
+                    <Card.Text>Description: <br/>{recipe.description}</Card.Text>
                     {recipe.author._id == recipe.alteredBy._id && (
                       <Card.Text>
                         Created By:{" "}
@@ -186,10 +186,10 @@ const RecipeDetailsPage = () => {
                       </Card.Text>
                     )}
                     <Card.Text>
-                      Ingredients: <span>{recipe.ingredients}</span>
+                    Ingredients: <br/><span>{recipe.ingredients}</span>
                     </Card.Text>
                     <Card.Text>
-                      Instructions: <span>{recipe.instructions}</span>
+                      Instructions: <br/><span>{recipe.instructions}</span>
                     </Card.Text>
                     {recipe.alteredBy._id == user._id && (
                       <Card.Text>
