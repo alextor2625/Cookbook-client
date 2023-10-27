@@ -196,11 +196,11 @@ const RecipeDetailsPage = () => {
                         </Link>
                       </Card.Text>
                     )}
-                    <Card.Text>Description: <br/>{recipe.description}</Card.Text>
-                    <Card.Text className="preserve-newline">
+                    <Card.Text style={{textAlign: "justify"}}>Description: <br/>{recipe.description}</Card.Text>
+                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">
                     Ingredients: <br/><span>{recipe.ingredients}</span>
                     </Card.Text>
-                    <Card.Text className="preserve-newline">
+                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">
                       Instructions: <br/><span>{recipe.instructions}</span>
                     </Card.Text>
                     {recipe.alteredBy._id == user._id && (
