@@ -29,6 +29,7 @@ const RecipeDetailsPage = () => {
   const [showCopyEditRecipeForm, setShowCopyEditRecipeForm] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(null);
   const [userHasReview, setUserHasReview] = useState(false);
+  const [ratingAvg, setRatingAvg] = useState(0);
 
   const navigate = useNavigate();
 
@@ -93,6 +94,14 @@ const RecipeDetailsPage = () => {
       ? setShowEditReviewForm(false)
       : setShowEditReviewForm(true);
   };
+
+  const calcAvg = (reviewsArr) => {
+    let sum = 0;
+    reviewsArr.forEach((review) => {
+      sum+=review.rating
+        })
+        return Math.ceil(sum/reviewsArr.length)
+  }
   useEffect(() => {
     const rcp = recipes.find((rcp) => rcp._id === recipeId);
     if (rcp) {
@@ -106,6 +115,8 @@ const RecipeDetailsPage = () => {
           }
           return rvw;
         });
+        const avg = calcAvg(rvws)
+        setRatingAvg(avg)
         console.log(rvws);
         setRecipeReviews(rvws);
         if (recipeReviews) {
@@ -185,7 +196,8 @@ const RecipeDetailsPage = () => {
                         </Link>
                       </Card.Text>
                     )}
-                    <Card.Text>
+                    {ratingAvg? <Card.Text>Rating: {ratingAvg}</Card.Text> : <Card.Text>No Ratings Yet</Card.Text>}
+                    <Card.Text className="preserve-newline">
                     Ingredients: <br/><span>{recipe.ingredients}</span>
                     </Card.Text>
                     <Card.Text className="preserve-newline">
@@ -265,7 +277,7 @@ const RecipeDetailsPage = () => {
                                   <Card.Subtitle>
                                     {"⭐".repeat(review.rating)} {review.title}
                                   </Card.Subtitle>
-                                  <Card.Text>{review.comment}</Card.Text>
+                                  <Card.Text className="preserve-newline">{review.comment}</Card.Text>
                                   {userHasReview && (
                                     <Button
                                       variant="primary"
