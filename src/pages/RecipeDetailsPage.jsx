@@ -196,15 +196,16 @@ const RecipeDetailsPage = () => {
                         </Link>
                       </Card.Text>
                     )}
-                    <Card.Text ><h3><strong>Description:</strong></h3> <br/><span style={{textAlign: "justify"}}>{recipe.description}</span></Card.Text>
-                    <Card.Text className="preserve-newline">
+                    <Card.Text ><h3><strong>Description:</strong></h3> <br/></Card.Text>
+                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">{recipe.description}</Card.Text>
+                    <Card.Text >
                     <h3><strong>Ingredients:</strong></h3> <br/>
                     </Card.Text>
-                    <Card.Text style={{textAlign: "justify"}}>{recipe.ingredients}</Card.Text>
+                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">{recipe.ingredients}</Card.Text>
                     <Card.Text className="preserve-newline">
                       <h3><strong>Instructions</strong>:</h3> <br/>
                     </Card.Text>
-                    <Card.Text style={{textAlign: "justify"}}>{recipe.instructions}</Card.Text>
+                    <Card.Text style={{textAlign: "justify"}} className="preserve-newline">{recipe.instructions}</Card.Text>
                     {recipe.alteredBy._id == user._id && (
                       <Card.Text>
                         <Button onClick={toggleEditRecipeForm}>Edit</Button>
