@@ -45,9 +45,9 @@ const DisplayUserCookBooks = ({ userId }) => {
                       <Card.Title className="text-center">
                         Name: {cookbook.name}
                       </Card.Title>
-                      <Card.Text className="text-center">
+                      {/* <Card.Text className="text-center">
                         Description: Empty For Now
-                      </Card.Text>
+                      </Card.Text> */}
                       <div className="text-center">
                         <Link to={`/cookbook/${cookbook._id}`}>
                           <Button variant="primary">View</Button>

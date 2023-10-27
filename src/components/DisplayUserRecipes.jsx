@@ -22,7 +22,7 @@ const DisplayUserRecipes = ({ userId }) => {
                     <Card.Img variant="top" src={recipe.image} style={{width: "10em"}} className="center-image"/>
                     <Card.Body className="d-flex flex-column">
                       <Card.Title>Name: {recipe.name}</Card.Title>
-                      <Card.Text>Category:{recipe.category}</Card.Text>
+                      <Card.Text>Category: {recipe.category}</Card.Text>
                       <Card.Text>Description: {recipe.description}</Card.Text>
                       <div className="mt-auto text-center">
                         <Link key={recipe._id} to={`/recipe/${recipe._id}`}>
