@@ -31,7 +31,7 @@ const AddToCookBook = ({ recipeId }) => {
       <Row>
         <Col md={6} className="mx-auto"> {/* Center the Select */}
           <Form.Group>
-            <Form.Label>Choose multiple options:</Form.Label>
+            <Form.Label>Select Cookbook:</Form.Label>
             <Select
               isMulti
               options={options}

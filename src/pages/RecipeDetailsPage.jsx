@@ -179,7 +179,7 @@ const RecipeDetailsPage = () => {
                     </Card.Text>
 
                     <Card.Text>Category: {recipe.category}</Card.Text>
-                    <Card.Text>Description: <br/>{recipe.description}</Card.Text>
+                    {ratingAvg? <Card.Text>Rating: {"⭐".repeat(ratingAvg)}</Card.Text> : <Card.Text>No Ratings Yet</Card.Text>}
                     {recipe.author._id == recipe.alteredBy._id && (
                       <Card.Text>
                         Created By:{" "}
@@ -196,7 +196,7 @@ const RecipeDetailsPage = () => {
                         </Link>
                       </Card.Text>
                     )}
-                    {ratingAvg? <Card.Text>Rating: {ratingAvg}</Card.Text> : <Card.Text>No Ratings Yet</Card.Text>}
+                    <Card.Text>Description: <br/>{recipe.description}</Card.Text>
                     <Card.Text className="preserve-newline">
                     Ingredients: <br/><span>{recipe.ingredients}</span>
                     </Card.Text>
