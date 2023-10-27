@@ -234,7 +234,7 @@ const RecipeDetailsPage = () => {
                     recipe.author._id == user._id ||
                     recipe.alteredBy._id == user._id
                   ) ? (
-                    !userHasReview ? (
+                    userHasReview ? (
                       <div className="center">
                         <Button
                           variant="primary"
