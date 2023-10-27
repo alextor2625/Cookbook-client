@@ -45,7 +45,7 @@ const EditUser = ({ handleEditProfile }) => {
             authenticateUser();
             setNewUser(true);
             setNewUsers(true);
-            // window.location.reload(false);
+            window.location.reload(false);
           })
           .catch((error) => {
             setErrorMessage(error.response.data.message);
@@ -60,7 +60,7 @@ const EditUser = ({ handleEditProfile }) => {
           handleEditProfile();
           setNewUser(true);
           setNewUsers(true);
-          // window.location.reload(false);
+          window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
