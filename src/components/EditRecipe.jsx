@@ -32,7 +32,7 @@ const EditRecipe = ({ recipeId, toggleForm }) => {
           .then((response) => {
             console.log(response.data);
             setNewRecipe(true)
-            // window.location.reload(false);
+            window.location.reload(false);
           })
           .catch((error) => {
             setErrorMessage(error.response.data.message);
@@ -44,7 +44,7 @@ const EditRecipe = ({ recipeId, toggleForm }) => {
           console.log(response.data);
           toggleForm();
           setNewRecipe(true)
-          // window.location.reload(false);
+          window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
