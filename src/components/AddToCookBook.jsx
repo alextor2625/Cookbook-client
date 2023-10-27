@@ -1,53 +1,37 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/auth.context";
 import { CookbooksContext } from "../context/cookbooks.context";
-import { del, post } from "../services/authService";
-import { Form } from "react-bootstrap";
+import { post } from "../services/authService";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 
-const AddToCookBook = ({recipeId}) => {
-    
-    const {user} = useContext(AuthContext)
-    const {setNewCookbook} = useContext(CookbooksContext)
-    const options = user.cookbooks.map(cookbook => {
-        return { value: cookbook._id, label: cookbook.name }
-    })
-    
-      const [selectedValues, setSelectedValues] = useState([]);
+const AddToCookBook = ({ recipeId }) => {
+  const { user } = useContext(AuthContext);
+  const { setNewCookbook } = useContext(CookbooksContext);
+  const options = user.cookbooks.map((cookbook) => {
+    return { value: cookbook._id, label: cookbook.name };
+  });
 
-      const handleAddToCookbook = async () => {
-        const promises = selectedValues.map((selected) => {
-          return post(`/cookbooks/add/${selected.value}/${recipeId}`)
-        })
-        let response = await Promise.all(promises).then(() => setNewCookbook(true))
+  const [selectedValues, setSelectedValues] = useState([]);
 
-        console.log(response);
-        // post(`/add/${cookbookId}/${recipeId}`).then((response) => {
-        //   console.log(response.data);
-        //   setNewCookbook(true)
-        //   // window.location.reload(false);
-        // });
-      };
-      
-      const handleSelectChange = (e) => {
-        // const selectedOptions = e.map((selection)=> {
-        //   return selection.value
-        // })
+  const handleAddToCookbook = async () => {
+    const promises = selectedValues.map((selected) => {
+      return post(`/cookbooks/add/${selected.value}/${recipeId}`);
+    });
+    await Promise.all(promises);
+    setNewCookbook(true);
+  };
 
-        // console.log("THIS IS THE VALUE ===>",e);
+  const handleSelectChange = (e) => {
+    setSelectedValues(e);
+  };
 
-        setSelectedValues(e);
-        if(selectedValues){
-            console.log("THIS IS THE VALUE ===>", selectedValues);
-        }
-      };
-
-
-    
-      return (
-        <div>
-          <div>
-            <label>Choose multiple options:</label>
+  return (
+    <Container>
+      <Row>
+        <Col md={6} className="mx-auto"> {/* Center the Select */}
+          <Form.Group>
+            <Form.Label>Choose multiple options:</Form.Label>
             <Select
               isMulti
               options={options}
@@ -55,15 +39,18 @@ const AddToCookBook = ({recipeId}) => {
               onChange={handleSelectChange}
               className="scrollable-multi-select"
             />
-          </div>
-          <button onClick={() => handleAddToCookbook(selectedValues)}>
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Button variant="primary" onClick={handleAddToCookbook}>
             Add to Cookbook
-          </button>
-          <div>
-            Selected Values: {selectedValues.map((option) => option.label).join(", ")}
-          </div>
-        </div>
-      );
-    };
-  
-  export default AddToCookBook
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default AddToCookBook;

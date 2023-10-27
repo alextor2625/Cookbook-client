@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
@@ -42,8 +42,6 @@ const CreateCookBook = () => {
             setNewUser(true);
             setNewReview(true);
             setNewUsers(true);
-
-            // window.location.reload(false);
           })
           .catch((err) => {
             console.log(err);
@@ -59,43 +57,51 @@ const CreateCookBook = () => {
           setNewUser(true);
           setNewReview(true);
           setNewUsers(true);
-          // window.location.reload(false);
+          window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-  useEffect(() => {
-    console.log("Reloading");
-  }, [cookbooks, user]);
   return (
-    <div>
-      <h1>New CookBook</h1>
+    <div className="container">
+      <h1 className="text-center">New CookBook</h1>
       <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 text-center">
           <Form.Label className="form-label">CookBook Image</Form.Label>
-          <Form.Control
-            className="form-control"
-            name="image"
-            type="file"
-            onChange={handleFile}
-          />
+          <div className="row justify-content-center">
+            <div className="col-3">
+              <Form.Control
+                className="form-control text-center"
+                name="image"
+                type="file"
+                onChange={handleFile}
+              />
+            </div>
+          </div>
         </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label> Name: </Form.Label>
-          <Form.Control
-            name="name"
-            type="text"
-            value={createNewCookBook.name}
-            onChange={handleTextChange}
-          />
+        <Form.Group className="mb-3 text-center">
+          <Form.Label>Name:</Form.Label>
+          <div className="row justify-content-center">
+            <div className="col-3">
+              <Form.Control
+                className="form-control text-center"
+                name="name"
+                type="text"
+                value={createNewCookBook.name}
+                onChange={handleTextChange}
+              />
+            </div>
+          </div>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+        <div className="d-flex justify-content-center">
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </div>
       </Form>
     </div>
   );

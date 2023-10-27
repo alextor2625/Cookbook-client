@@ -128,14 +128,14 @@ const EditRecipe = ({ recipeId, toggleForm }) => {
           />
         </Form.Group>
 
-        <div className="center">
+        <div className="center d-grid gap-2">
           <Button variant="primary" type="submit">
             Save
           </Button>
         </div>
       </Form>
       <div className="center">
-        <Button variant="primary" onClick={toggleForm}>
+        <Button variant="danger" onClick={toggleForm}>
           Cancel
         </Button>
       </div>

@@ -150,7 +150,7 @@ const CopyEditRecipe = ({ recipeId, toggleForm }) => {
         </div>
       </Form>
       <div className="center">
-        <Button variant="primary" onClick={toggleForm}>
+        <Button variant="danger" onClick={toggleForm}>
           Cancel
         </Button>
       </div>

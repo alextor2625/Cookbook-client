@@ -1,25 +1,26 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { del, put } from "../services/authService";
 import { RecipesContext } from "../context/recipes.context";
 import { UsersContext } from "../context/users.context";
 import { ReviewsContext } from "../context/reviews.context";
+import { AuthContext } from "../context/auth.context";
+import { CookbooksContext } from "../context/cookbooks.context";
 import { Button, Card } from "react-bootstrap";
 import CreateReview from "../components/CreateReview";
 import MySpinner from "./../components/MySpinner";
-import { AuthContext } from "../context/auth.context";
-import { CookbooksContext } from "../context/cookbooks.context";
 import EditReview from "./../components/EditReview";
-import { del, put } from "../services/authService";
 import EditRecipe from "../components/EditRecipe";
 import CopyEditRecipe from "../components/CopyEditRecipe";
 import AddToCookBook from "../components/AddToCookBook";
 const RecipeDetailsPage = () => {
   const { recipeId } = useParams();
   const { recipes } = useContext(RecipesContext);
-  const { reviews,setNewReview } = useContext(ReviewsContext);
-  const { users,setNewUsers } = useContext(UsersContext);
-  const {setNewCookbook } = useContext(CookbooksContext);
-  const { user, storeToken, authenticateUser, setNewUser } = useContext(AuthContext);
+  const { reviews, setNewReview } = useContext(ReviewsContext);
+  const { users, setNewUsers } = useContext(UsersContext);
+  const { setNewCookbook } = useContext(CookbooksContext);
+  const { user, storeToken, authenticateUser, setNewUser } =
+    useContext(AuthContext);
   const [recipe, setRecipe] = useState(null);
   const [recipeReviews, setRecipeReviews] = useState([]);
   const [showCreateReviewForm, setShowCreateReviewForm] = useState(false);
@@ -47,16 +48,15 @@ const RecipeDetailsPage = () => {
       : setShowCreateReviewForm(true);
   };
 
-  
   const handleAddRecipe = (recipeId) => {
     put(`/recipes/add`, { recipeId }).then((response) => {
       console.log(response.data);
       storeToken(response.data.authToken);
       authenticateUser();
-      setNewUser(true)
-      setNewCookbook(true)
-      setNewReview(true)
-      setNewUsers(true)
+      setNewUser(true);
+      setNewCookbook(true);
+      setNewReview(true);
+      setNewUsers(true);
       // window.location.reload(false);
     });
   };
@@ -65,25 +65,27 @@ const RecipeDetailsPage = () => {
       console.log(response.data);
       storeToken(response.data.authToken);
       authenticateUser();
-      setNewUser(true)
-      setNewCookbook(true)
-      setNewReview(true)
-      setNewUsers(true)
-      window.location.reload(false);
+      setNewUser(true);
+      setNewCookbook(true);
+      setNewReview(true);
+      setNewUsers(true);
+      // window.location.reload(false);
     });
   };
   const handleDeleteRecipe = (recipeId) => {
-    del(`/recipes/delete/${recipeId}`).then((response) => {
-      console.log("Recipe Deleted",response.data);
-      storeToken(response.data.authToken);
-      authenticateUser();
-      navigate("/profile");
-      setNewUser(true)
-      setNewCookbook(true)
-      setNewReview(true)
-      setNewUsers(true)
-      // window.location.reload(false);
-    }).catch(error => console.log(error))
+    del(`/recipes/delete/${recipeId}`)
+      .then((response) => {
+        console.log("Recipe Deleted", response.data);
+        storeToken(response.data.authToken);
+        authenticateUser();
+        navigate("/profile");
+        setNewUser(true);
+        setNewCookbook(true);
+        setNewReview(true);
+        setNewUsers(true);
+        // window.location.reload(false);
+      })
+      .catch((error) => console.log(error));
   };
   const toggleEditReviewForm = (reviewId) => {
     setSelectedReviewId(reviewId);
@@ -115,7 +117,6 @@ const RecipeDetailsPage = () => {
     }
   }, [reviews, recipes, recipeId, users, selectedReviewId, user]);
   return (
-    
     <div className="center">
       {recipe ? (
         <div>
@@ -130,8 +131,8 @@ const RecipeDetailsPage = () => {
                     className="center-image"
                   />
                   <Card.Body className="center-card-text">
-                    <AddToCookBook recipeId={recipeId}/>
                     <Card.Title>{recipe.name} Recipe</Card.Title>
+                    <AddToCookBook recipeId={recipeId} />
                     <Card.Text>
                       {" "}
                       {!(recipe.alteredBy._id == user._id) ? (
@@ -143,7 +144,6 @@ const RecipeDetailsPage = () => {
                               <Button onClick={() => handleAddRecipe(recipeId)}>
                                 Add Recipe
                               </Button>{" "}
-                              
                             </>
                           ) : (
                             <>
@@ -242,38 +242,43 @@ const RecipeDetailsPage = () => {
                       </Button>
                     </div>
                   )}
-                  <div className="center">
-                    Reviews:{" "}
+                  <div className="text-center">
+                    <h2>Reviews</h2>
                     {recipeReviews.length ? (
                       <div>
                         {!showEditReviewForm ? (
                           <>
-                            {recipeReviews.map((review) => {
-                              return (
-                                <div key={review._id}>
-                                  <h4>
-                                    <img src="" alt="" />{" "}
+                            {recipeReviews.map((review) => (
+                              <Card key={review._id} className="my-3">
+                                <Card.Body>
+                                  <Card.Title>
+                                    <img
+                                      src={review.author.image} // Add profile image source
+                                      alt={`${review.author.name}'s profile`}
+                                      style={{ width: "50px" }}
+                                      className="profile-image"
+                                    />{" "}
                                     <Link to={`/profile/${review.author._id}`}>
                                       {review.author.name}
                                     </Link>
-                                  </h4>
-                                  <h3>
+                                  </Card.Title>
+                                  <Card.Subtitle>
                                     {"⭐".repeat(review.rating)} {review.title}
-                                  </h3>
-                                  <p>{review.comment}</p>
+                                  </Card.Subtitle>
+                                  <Card.Text>{review.comment}</Card.Text>
                                   {userHasReview && (
                                     <Button
+                                      variant="primary"
                                       onClick={() =>
                                         toggleEditReviewForm(review._id)
                                       }
                                     >
-                                      {" "}
                                       Edit
                                     </Button>
                                   )}
-                                </div>
-                              );
-                            })}
+                                </Card.Body>
+                              </Card>
+                            ))}
                           </>
                         ) : (
                           <EditReview
@@ -284,7 +289,7 @@ const RecipeDetailsPage = () => {
                         )}
                       </div>
                     ) : (
-                      <span>No Reviews</span>
+                      <p>No Reviews</p>
                     )}
                   </div>
                 </>

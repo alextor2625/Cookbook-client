@@ -23,7 +23,7 @@ const EditReview = ({ recipeId, reviewId, toggleForm }) => {
       post(`/reviews/update/${reviewId}`, editReview)
         .then((response) => {
           console.log(response.data);
-          // toggleForm();
+          toggleForm();
           setNewReview(true)
           // window.location.reload(false);
         })
@@ -41,7 +41,7 @@ const handleDelete = () => {
     storeToken(response.data.authToken)
     authenticateUser()
     setNewReview(true)
-    // window.location.reload(false);
+    window.location.reload(false);
   })
   .catch((err) => {
     console.log(err);
@@ -87,16 +87,19 @@ const handleDelete = () => {
           />
         </Form.Group>
         {errorMessage && <p>{errorMessage}</p>}
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+        
+      <div className="d-grid gap-2">
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+              <Button variant="secondary" onClick={toggleForm}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+            </div>
       </Form>
-      <Button variant="primary" onClick={toggleForm}>
-        Cancel
-      </Button>
-      <Button variant="primary" onClick={handleDelete}>
-        Delete
-      </Button>
     </div>
   );
 };
