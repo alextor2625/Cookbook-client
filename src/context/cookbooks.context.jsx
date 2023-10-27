@@ -11,7 +11,7 @@ const CookbooksProvider = ({ children }) => {
     get("/cookbooks/all")
       .then((response) => {
         console.log("Cookbooks Context Response Data", response.data);
-        setNewCookbook(false)
+        setNewCookbook(false);
         setCookbooks(response.data);
       })
       .catch((err) => {
@@ -20,7 +20,7 @@ const CookbooksProvider = ({ children }) => {
   }, [newCookbook]);
   return (
     <CookbooksContext.Provider value={{ cookbooks, setCookbooks, setNewCookbook }}>
-        {children}
+      {children}
     </CookbooksContext.Provider>
   );
 };

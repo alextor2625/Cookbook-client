@@ -12,13 +12,14 @@ import EditReview from "./../components/EditReview";
 import { del, put } from "../services/authService";
 import EditRecipe from "../components/EditRecipe";
 import CopyEditRecipe from "../components/CopyEditRecipe";
+import AddToCookBook from "../components/AddToCookBook";
 const RecipeDetailsPage = () => {
   const { recipeId } = useParams();
   const { recipes } = useContext(RecipesContext);
-  const { reviews } = useContext(ReviewsContext);
-  const { users } = useContext(UsersContext);
+  const { reviews,setNewReview } = useContext(ReviewsContext);
+  const { users,setNewUsers } = useContext(UsersContext);
   const {setNewCookbook } = useContext(CookbooksContext);
-  const { user, storeToken, authenticateUser } = useContext(AuthContext);
+  const { user, storeToken, authenticateUser, setNewUser } = useContext(AuthContext);
   const [recipe, setRecipe] = useState(null);
   const [recipeReviews, setRecipeReviews] = useState([]);
   const [showCreateReviewForm, setShowCreateReviewForm] = useState(false);
@@ -52,7 +53,11 @@ const RecipeDetailsPage = () => {
       console.log(response.data);
       storeToken(response.data.authToken);
       authenticateUser();
-      window.location.reload(false);
+      setNewUser(true)
+      setNewCookbook(true)
+      setNewReview(true)
+      setNewUsers(true)
+      // window.location.reload(false);
     });
   };
   const handleRemoveRecipe = (recipeId) => {
@@ -60,7 +65,11 @@ const RecipeDetailsPage = () => {
       console.log(response.data);
       storeToken(response.data.authToken);
       authenticateUser();
-      window.location.reload(false);
+      setNewUser(true)
+      setNewCookbook(true)
+      setNewReview(true)
+      setNewUsers(true)
+      // window.location.reload(false);
     });
   };
   const handleDeleteRecipe = (recipeId) => {
@@ -69,7 +78,11 @@ const RecipeDetailsPage = () => {
       storeToken(response.data.authToken);
       authenticateUser();
       navigate("/profile");
-      window.location.reload(false);
+      setNewUser(true)
+      setNewCookbook(true)
+      setNewReview(true)
+      setNewUsers(true)
+      // window.location.reload(false);
     });
   };
   const toggleEditReviewForm = (reviewId) => {
@@ -102,6 +115,7 @@ const RecipeDetailsPage = () => {
     }
   }, [reviews, recipes, recipeId, users, selectedReviewId, user]);
   return (
+    
     <div className="center">
       {recipe ? (
         <div>
@@ -116,6 +130,7 @@ const RecipeDetailsPage = () => {
                     className="center-image"
                   />
                   <Card.Body className="center-card-text">
+                    <AddToCookBook recipeId={recipeId}/>
                     <Card.Title>{recipe.name} Recipe</Card.Title>
                     <Card.Text>
                       {" "}
@@ -128,6 +143,7 @@ const RecipeDetailsPage = () => {
                               <Button onClick={() => handleAddRecipe(recipeId)}>
                                 Add Recipe
                               </Button>{" "}
+                              
                             </>
                           ) : (
                             <>

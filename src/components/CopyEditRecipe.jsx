@@ -5,7 +5,7 @@ import { uploadImg } from "../services/uploadService";
 import { RecipesContext } from "../context/recipes.context";
 
 const CopyEditRecipe = ({ recipeId, toggleForm }) => {
-  const { recipes } = useContext(RecipesContext);
+  const { recipes, setNewRecipe } = useContext(RecipesContext);
   const [errorMessage, setErrorMessage] = useState(undefined);
   const [file, setFile] = useState(null);
   const [recipeEdit, setRecipeEdit] = useState({
@@ -41,7 +41,8 @@ const CopyEditRecipe = ({ recipeId, toggleForm }) => {
           })
             .then((response) => {
               console.log(response.data);
-              window.location.reload(false);
+              setNewRecipe(true)
+              // window.location.reload(false);
             })
             .catch((error) => {
               setErrorMessage(error.response.data.message);
@@ -52,7 +53,8 @@ const CopyEditRecipe = ({ recipeId, toggleForm }) => {
           .then((response) => {
             console.log(response.data);
             toggleForm();
-            window.location.reload(false);
+            setNewRecipe(true)
+            // window.location.reload(false);
           })
           .catch((err) => {
             console.log(err);

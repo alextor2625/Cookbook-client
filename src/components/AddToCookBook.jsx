@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
-import { Form } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { CookbooksContext } from "../context/cookbooks.context";
 import { del, post } from "../services/authService";
+import { Form } from "react-bootstrap";
+import Select from "react-select";
 
-const AddToCookBook = () => {
+const AddToCookBook = ({recipeId}) => {
     
     const {user} = useContext(AuthContext)
     const {setNewCookbook} = useContext(CookbooksContext)
@@ -13,55 +14,56 @@ const AddToCookBook = () => {
     })
     
       const [selectedValues, setSelectedValues] = useState([]);
+
+      const handleAddToCookbook = async () => {
+        const promises = selectedValues.map((selected) => {
+          return post(`/cookbooks/add/${selected.value}/${recipeId}`)
+        })
+        let response = await Promise.all(promises).then(() => setNewCookbook(true))
+
+        console.log(response);
+        // post(`/add/${cookbookId}/${recipeId}`).then((response) => {
+        //   console.log(response.data);
+        //   setNewCookbook(true)
+        //   // window.location.reload(false);
+        // });
+      };
       
-      const handleAddToCookbook = (cookbookId, recipeId) => {
-        post(`/add/${cookbookId}/${recipeId}`).then((response) => {
-          console.log(response.data);
-          setNewCookbook(true)
-          // window.location.reload(false);
-        });
-      };
-      const handleRemoveFromCookbook = (cookbookId, recipeId) => {
-        del(`/remove/${cookbookId}/${recipeId}`).then((response) => {
-          console.log(response.data);
-          setNewCookbook(true)
-          // window.location.reload(false);
-        });
-      };
       const handleSelectChange = (e) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, (option) =>
-          option.value
-        );
-        setSelectedValues(selectedOptions);
+        // const selectedOptions = e.map((selection)=> {
+        //   return selection.value
+        // })
+
+        // console.log("THIS IS THE VALUE ===>",e);
+
+        setSelectedValues(e);
+        if(selectedValues){
+            console.log("THIS IS THE VALUE ===>", selectedValues);
+        }
       };
+
+
     
       return (
-        <div className="container">
-          <h1 className="text-center">Scrollable Multi-Select Dropdown</h1>
-          <Form>
-            <Form.Group>
-              <Form.Label>Choose multiple options:</Form.Label>
-              <Form.Select
-                className="scrollable-multi-select"
-                size="5"
-                multiple
-                value={selectedValues}
-                onChange={handleSelectChange}
-              >
-                {options.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Form>
+        <div>
           <div>
-            Selected Values: {selectedValues.join(", ")}
+            <label>Choose multiple options:</label>
+            <Select
+              isMulti
+              options={options}
+              value={selectedValues}
+              onChange={handleSelectChange}
+              className="scrollable-multi-select"
+            />
+          </div>
+          <button onClick={() => handleAddToCookbook(selectedValues)}>
+            Add to Cookbook
+          </button>
+          <div>
+            Selected Values: {selectedValues.map((option) => option.label).join(", ")}
           </div>
         </div>
       );
     };
   
   export default AddToCookBook
-  

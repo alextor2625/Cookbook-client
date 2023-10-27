@@ -11,7 +11,7 @@ function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
-
+  const [newUser,setNewUser] = useState(false)
   const navigate = useNavigate()
 
   const storeToken = (token) => {       //  <==  ADD
@@ -68,9 +68,9 @@ function AuthProvider({ children }) {
   useEffect(() => { 
 
     authenticateUser()
+    setNewUser(false)
 
-
-  }, []);
+  }, [newUser]);
   
   /* 
     Functions for handling the authentication status (isLoggedIn, isLoading, user)
@@ -78,7 +78,7 @@ function AuthProvider({ children }) {
   */
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading, user, storeToken, authenticateUser, logOutUser, removeToken }}>
+    <AuthContext.Provider value={{ isLoggedIn, isLoading, user, storeToken, authenticateUser, logOutUser, removeToken, setNewUser }}>
       {children}
     </AuthContext.Provider>
   )

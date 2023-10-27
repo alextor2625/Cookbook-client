@@ -3,9 +3,10 @@ import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
 import { uploadImg } from "../services/uploadService";
+import { RecipesContext } from "../context/recipes.context";
 
 const CreateRecipe = () => {
-  const [newRecipe, setNewRecipe] = useState({
+  const [createNewRecipe, setCreateNewRecipe] = useState({
     name: "",
     category: "",
     description: "",
@@ -14,8 +15,9 @@ const CreateRecipe = () => {
   });
   const [file, setFile] = useState(null);
   const { authenticateUser, storeToken } = useContext(AuthContext);
+  const { setNewRecipe } = useContext(RecipesContext);
   const handleTextChange = (e) => {
-    setNewRecipe((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setCreateNewRecipe((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleFile = (e) => setFile(e.target.files[0]);
@@ -24,24 +26,26 @@ const CreateRecipe = () => {
     e.preventDefault();
     if (file) {
       uploadImg(file).then((response) => {
-        post("/recipes/create", { ...newRecipe, image: response.data.fileUrl })
+        post("/recipes/create", { ...createNewRecipe, image: response.data.fileUrl })
           .then((response) => {
             console.log(response.data);
             storeToken(response.data.authToken);
             authenticateUser();
-            window.location.reload(false);
+            setNewRecipe(true)
+            // window.location.reload(false);
           })
           .catch((err) => {
             console.log(err);
           });
       });
     } else {
-      post("/recipes/create", newRecipe)
+      post("/recipes/create", createNewRecipe)
         .then((response) => {
           console.log(response.data);
           storeToken(response.data.authToken);
           authenticateUser();
-          window.location.reload(false);
+          setNewRecipe(true)
+          // window.location.reload(false);
 
         })
         .catch((err) => {
@@ -69,7 +73,7 @@ const CreateRecipe = () => {
           <Form.Control
             name="name"
             type="text"
-            value={newRecipe.name}
+            value={createNewRecipe.name}
             onChange={handleTextChange}
           />
         </Form.Group>
@@ -99,7 +103,7 @@ const CreateRecipe = () => {
             rows={10}
             name="description"
             type="text"
-            value={newRecipe.description}
+            value={createNewRecipe.description}
             onChange={handleTextChange}
           />
         </Form.Group>
@@ -110,7 +114,7 @@ const CreateRecipe = () => {
             rows={10}
             name="ingredients"
             type="text"
-            value={newRecipe.ingredients}
+            value={createNewRecipe.ingredients}
             onChange={handleTextChange}
           />
         </Form.Group>
@@ -121,7 +125,7 @@ const CreateRecipe = () => {
             rows={10}
             name="instructions"
             type="text"
-            value={newRecipe.instructions}
+            value={createNewRecipe.instructions}
             onChange={handleTextChange}
           />
         </Form.Group>

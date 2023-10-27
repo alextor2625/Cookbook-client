@@ -3,15 +3,17 @@ import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
 import { uploadImg } from "../services/uploadService";
+import { CookbooksContext } from "../context/cookbooks.context";
 
 const CreateCookBook = () => {
-  const [newCookBook, setNewCookBook] = useState({
+  const [createNewCookBook, setCreateNewCookBook] = useState({
     name: "",
   });
   const [file, setFile] = useState(null);
   const { authenticateUser, storeToken } = useContext(AuthContext);
+  const { setNewCookBook } = useContext(CookbooksContext);
   const handleTextChange = (e) => {
-    setNewCookBook((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setCreateNewCookBook((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleFile = (e) => setFile(e.target.files[0]);
@@ -21,26 +23,28 @@ const CreateCookBook = () => {
     if (file) {
       uploadImg(file).then((response) => {
         post("/cookbooks/create", {
-          ...newCookBook,
+          ...createNewCookBook,
           image: response.data.fileUrl,
         })
           .then((response) => {
             console.log(response.data);
             storeToken(response.data.authToken);
             authenticateUser();
-            window.location.reload(false);
+            setNewCookBook(true)
+            // window.location.reload(false);
           })
           .catch((err) => {
             console.log(err);
           });
       });
     } else {
-      post("/cookbooks/create", newCookBook)
+      post("/cookbooks/create", createNewCookBook)
         .then((response) => {
           console.log(response.data);
           storeToken(response.data.authToken);
           authenticateUser();
-          window.location.reload(false);
+          setNewCookBook(true)
+          // window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
@@ -67,7 +71,7 @@ const CreateCookBook = () => {
           <Form.Control
             name="name"
             type="text"
-            value={newCookBook.name}
+            value={createNewCookBook.name}
             onChange={handleTextChange}
           />
         </Form.Group>

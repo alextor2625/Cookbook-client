@@ -5,7 +5,7 @@ import { uploadImg } from "../services/uploadService";
 import { RecipesContext } from "../context/recipes.context";
 
 const EditRecipe = ({ recipeId, toggleForm }) => {
-  const { recipes } = useContext(RecipesContext);
+  const { recipes, setNewRecipe } = useContext(RecipesContext);
   const [errorMessage, setErrorMessage] = useState(undefined);
   const [file, setFile] = useState(null);
   const [recipeEdit, setRecipeEdit] = useState({
@@ -31,7 +31,8 @@ const EditRecipe = ({ recipeId, toggleForm }) => {
         })
           .then((response) => {
             console.log(response.data);
-            window.location.reload(false);
+            setNewRecipe(true)
+            // window.location.reload(false);
           })
           .catch((error) => {
             setErrorMessage(error.response.data.message);
@@ -42,7 +43,8 @@ const EditRecipe = ({ recipeId, toggleForm }) => {
         .then((response) => {
           console.log(response.data);
           toggleForm();
-          window.location.reload(false);
+          setNewRecipe(true)
+          // window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
@@ -76,10 +78,7 @@ const EditRecipe = ({ recipeId, toggleForm }) => {
 
         <Form.Group className="mb-3">
           <Form.Label> Category: </Form.Label>
-          <Form.Select name="category" type="text" onChange={handleTextChange}>
-            <option value={recipeEdit.category} selected disabled>
-              {recipeEdit.category}
-            </option>
+          <Form.Select name="category" type="text" defaultValue={recipeEdit.category} onChange={handleTextChange}>
             <option value="Breakfast">Breakfast</option>
             <option value="Lunch">Lunch</option>
             <option value="Dinner">Dinner</option>

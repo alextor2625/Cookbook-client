@@ -3,31 +3,34 @@ import { post } from "../services/authService";
 import { Form, Button } from "react-bootstrap";
 import { AuthContext } from "../context/auth.context";
 import { RecipesContext } from "../context/recipes.context";
+import { ReviewsContext } from "../context/reviews.context";
 
 const CreateReview = ({ recipeId, toggleForm }) => {
   const { recipes } = useContext(RecipesContext);
+  const { setNewReview } = useContext(ReviewsContext);
   const { authenticateUser, storeToken } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
-  const [newReview, setNewReview] = useState({
+  const [createNewReview, setCreateNewReview] = useState({
     title: "",
     comment: "",
     rating: 0,
   });
 
   const handleTextChange = (e) => {
-    setNewReview((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setCreateNewReview((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (recipes.find((rcp) => recipeId == rcp._id)) {
-      post(`/reviews/create/${recipeId}`, newReview)
+      post(`/reviews/create/${recipeId}`, createNewReview)
         .then((response) => {
           console.log(response.data);
           storeToken(response.data.authToken);
           authenticateUser();
           toggleForm();
-          window.location.reload(false);
+          setNewReview(true)
+          // window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
@@ -46,7 +49,7 @@ const CreateReview = ({ recipeId, toggleForm }) => {
           <Form.Control
             name="title"
             type="text"
-            value={newReview.title}
+            value={createNewReview.title}
             onChange={handleTextChange}
           />
         </Form.Group>
@@ -54,7 +57,7 @@ const CreateReview = ({ recipeId, toggleForm }) => {
           <Form.Label> Rating: </Form.Label>
           <Form.Select
             name="rating"
-            value={newReview.rating}
+            value={createNewReview.rating}
             onChange={handleTextChange}
           >
             <option value={0}> </option>
@@ -72,7 +75,7 @@ const CreateReview = ({ recipeId, toggleForm }) => {
             rows={10}
             name="comment"
             type="text"
-            value={newReview.comment}
+            value={createNewReview.comment}
             onChange={handleTextChange}
           />
         </Form.Group>

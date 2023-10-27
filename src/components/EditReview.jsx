@@ -5,7 +5,7 @@ import { ReviewsContext } from "../context/reviews.context";
 import { AuthContext } from "../context/auth.context";
 
 const EditReview = ({ recipeId, reviewId, toggleForm }) => {
-  const { reviews } = useContext(ReviewsContext);
+  const { reviews, setNewReview } = useContext(ReviewsContext);
   const { authenticateUser,storeToken } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [editReview, setEditReview] = useState({
@@ -24,7 +24,8 @@ const EditReview = ({ recipeId, reviewId, toggleForm }) => {
         .then((response) => {
           console.log(response.data);
           // toggleForm();
-          window.location.reload(false);
+          setNewReview(true)
+          // window.location.reload(false);
         })
         .catch((err) => {
           console.log(err);
@@ -39,7 +40,8 @@ const handleDelete = () => {
     console.log(response.data);
     storeToken(response.data.authToken)
     authenticateUser()
-    window.location.reload(false);
+    setNewReview(true)
+    // window.location.reload(false);
   })
   .catch((err) => {
     console.log(err);
